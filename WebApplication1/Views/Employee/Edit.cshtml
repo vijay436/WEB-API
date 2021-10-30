@@ -1,0 +1,85 @@
+﻿@model WebApplication1.Models.Employee
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+<style>
+    .btn-design {
+        background-color: green;
+        color: white;
+    }
+</style>
+
+<form>
+    <div class="form-group">
+        <label>Employee Id </label>
+        <input type="text" id="EmpId" class="form-control" maxlength="20" value="@Model.EmpId" disabled>
+    </div>
+
+    <div class="form-group">
+        <label>Employee Name</label>
+        <input type="text" id="EmpName" class="form-control" maxlength="20" value="@Model.EmpName">
+    </div>
+    <div class=" form-group">
+        <label>Employee Salary</label>
+        <input type="text" id="EmpSalary" class=" form-control" maxlength="20" value="@Model.EmpSal">
+    </div>
+    <div class=" form-group">
+        <label>Employee Address</label>
+        <input type="text" id="EmpAddress" class="form-control" maxlength="20" value="@Model.EmpAddress">
+    </div>
+
+    @*<input type="button" id="btnSave" style="background-color:green; color:white" value="Save" />*@
+
+    <input type="button" id="btnSave" class="btn-design" value="Save" />
+</form>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+       
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+
+    $('#btnSave').click(function () {
+        updateEmployee();
+    });
+
+
+
+     function updateEmployee() {
+    var link = '@Url.Action("Index", "Employee")';
+        var empObj = {
+            EmpId: $('#EmpId').val(),
+            EmpName: $('#EmpName').val(),
+            EmpSal: $('#EmpSalary').val(),
+            EmpAddress: $('#EmpAddress').val(),
+
+         };
+         console.log($('#EmpName').val());
+        $.ajax({
+            url: "/Employee/Edit",
+            data: JSON.stringify(empObj),
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    window.location.href = link;
+                }
+
+            },
+            error: function (errormessage) {
+
+            }
+        });
+    }
+
+</script>
+
